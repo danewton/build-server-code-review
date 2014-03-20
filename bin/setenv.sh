@@ -11,6 +11,9 @@ if [ "$FOUND_TYPE" != "" ]; then
   TYPE=$FOUND_TYPE
 fi;
 
+WEBXML=$(find . -type f -iname 'web.xml' | head -n 1)
+WEBLOGICXML=$(find . -type f -iname 'weblogic.xml' | head -n 1)
+
 function pomHas(){
   if [ ! -f "pom.xml" ]; then
     return 0

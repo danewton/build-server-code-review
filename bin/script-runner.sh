@@ -8,13 +8,14 @@ REVIEW_HOME=$SCRIPT_DIR/../
 SCRIPT_OUT=/tmp/out$$;
 TMP_LOG=/tmp/log$$;
 
-echo -n "testing $(basename $1) ... " >> $TMP_LOG
+HEAD_START="$(basename $1)"
+
 $1 >> $SCRIPT_OUT 2>&1;
 if [ "$?" -ne 0 ]; then
- echo "FAILED" >> $TMP_LOG
+ printf "%-75s%-15s\n" $HEAD_START "FAILED" >> $TMP_LOG
  echo "1" > $2;
 else
- echo "SUCCESS" >> $TMP_LOG
+ printf "%-75s%-15s\n" $HEAD_START "PASSED" >> $TMP_LOG
 fi;
 
 cat $TMP_LOG
