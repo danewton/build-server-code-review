@@ -8,6 +8,7 @@ rtnfile=/tmp/rtn$$
 
 PROC_CNT="8"
 RPLCMENT='{}';
+
 find $REVIEW_HOME/rules.d/*.sh | xargs -P $PROC_CNT -n 1 -I "$RPLCMENT" $SCRIPT_DIR/script-runner.sh "$RPLCMENT" $rtnfile
 
 if [ -f $rtnfile ]; then
