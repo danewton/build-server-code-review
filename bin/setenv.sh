@@ -11,3 +11,11 @@ if [ "$FOUND_TYPE" != "" ]; then
   TYPE=$FOUND_TYPE
 fi;
 
+function version(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  echo $(grep -A 3 "artifactId>$1" pom.xml | grep 'version' | sed 's/.*>\(.*\)<.*/\1/g')
+}
+
+
