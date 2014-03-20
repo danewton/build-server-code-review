@@ -8,10 +8,7 @@ rtnfile=/tmp/rtn$$
 
 PROC_CNT="8"
 RPLCMENT='{}';
-SH_CMD='TMP_LOG=/tmp/log$$; {} >> $TMP_LOG 2>&1; if [ "$?" -ne 0 ]; then echo "1" >> '$rtnfile'; fi; cat $TMP_LOG'
-
-#cd /opt/projects;
-find $REVIEW_HOME/rules.d/*.sh | xargs -P $PROC_CNT -n 1 -I "$RPLCMENT" sh -c "$SH_CMD"
+find $REVIEW_HOME/rules.d/*.sh | xargs -P $PROC_CNT -n 1 -I "$RPLCMENT" $SCRIPT_DIR/script-runner.sh "$RPLCMENT" $rtnfile
 
 if [ -f $rtnfile ]; then
   rtn=$(cat $rtnfile)

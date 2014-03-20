@@ -1,22 +1,7 @@
 #!/bin/bash
 
-rtn=0
-msg=/tmp/msg$$
-
-echo -n "testing parent-pom ... "
-if [ $(grep -c 'parent-pom' pom.xml) -ne 0 ]; then
- echo "SUCCESS"
-else
- rtn=1
- echo "FAILED"
- echo "please add the healthcheck jar to the pom.xml" >> $msg
+if [ $(grep -c 'parent-pom' pom.xml) -eq 0 ]; then
+ echo "please add the healthcheck jar to the pom.xml"
+ exit 1
 fi
-
-# if there's a message, echo with a few spaces in front of each line, then remove
-if [ -f "$msg" ]; then
-  sed 's/^/  /g' $msg
-  rm $msg
-fi
-
-exit $rtn
 
