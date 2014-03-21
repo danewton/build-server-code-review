@@ -6,7 +6,12 @@ if [ "$IS_MVN" == "false" ]; then
  exit 0
 fi
 
-ensureArtifactScope "unitils" "test"
+ensureArtifactScope "unitils-dbunit" "test"
+if [ $? -ne 0 ]; then
+  exit 1
+fi
+
+ensureArtifactScope "unitils-spring" "test"
 if [ $? -ne 0 ]; then
   exit 1
 fi
