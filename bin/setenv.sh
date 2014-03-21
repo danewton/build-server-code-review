@@ -25,7 +25,7 @@ function pomHas(){
   fi
 }
 
-function version(){
+function minVersion(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;

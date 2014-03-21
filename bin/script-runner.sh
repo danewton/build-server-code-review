@@ -15,7 +15,7 @@ if [ "$?" -ne 0 ]; then
  printf "%-75s%-15s\n" $HEAD_START "FAILED" >> $TMP_LOG
  echo "1" > $2;
 else
- printf "%-75s%-15s\n" $HEAD_START "PASSED" >> $TMP_LOG
+ printf "%-75s%-15s\n" $HEAD_START "PASS" >> $TMP_LOG
 fi;
 
 cat $TMP_LOG
