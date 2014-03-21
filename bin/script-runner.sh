@@ -10,7 +10,7 @@ TMP_LOG=/tmp/log$$;
 
 HEAD_START="$(basename $1)"
 
-$1 >> $SCRIPT_OUT 2>&1;
+$1 $@ >> $SCRIPT_OUT 2>&1;
 if [ "$?" -ne 0 ]; then
  printf "%-75s%-15s\n" $HEAD_START "FAILED" >> $TMP_LOG
  echo "1" > $2;

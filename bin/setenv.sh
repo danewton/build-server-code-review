@@ -59,3 +59,13 @@ function getGroupId(){
   echo $(head -n 10 pom.xml | grep '<groupId>' | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
+function isRelease(){
+  for arg in "$@"; do
+    if [ "$arg" == "release:release" ]; then
+      echo true
+      return 0
+    fi;
+  done;
+  echo false
+}
+
