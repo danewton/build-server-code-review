@@ -6,6 +6,10 @@ if [ "$IS_MVN" == "false" ]; then
  exit 0
 fi
 
+if [ "$TYPE" == "pom" ]; then
+ exit 0
+fi;
+
 LIBS_RELEASE_URL="http://artifactory.suddenlink.cequel3.com/artifactory/libs-release-local"
 VER=$(getVersion)
 ARTID=$(getArtifactId)
