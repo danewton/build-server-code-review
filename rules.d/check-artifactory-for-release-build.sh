@@ -20,7 +20,7 @@ fi;
 # 2) the pom doesn't have -SNAPSHOT in it
 FND=$(curl -s -I $LIBS_RELEASE_URL/$GRPID/$ARTID/$VER/$ARTID-$VER.$TYPE | grep -c 'application/java-archive')
 if [ $FND -ne 0 ]; then
- echo "this particular version '$VER' already exists within Artifactory, please bump up your version number within your pom.xml"
+ echo "this particular version '$VER' (if built) already exists within Artifactory, please bump up your version number within your pom.xml"
  exit 1
 fi
 
