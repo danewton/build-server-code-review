@@ -38,3 +38,24 @@ function minVersion(){
   fi
 }
 
+function getVersion(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  echo $(head -n 10 pom.xml | grep '<version>' | sed 's/.*>\(.*\)<.*/\1/g')
+}
+
+function getArtifactId(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  echo $(head -n 10 pom.xml | grep '<artifactId>' | sed 's/.*>\(.*\)<.*/\1/g')
+}
+
+function getGroupId(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  echo $(head -n 10 pom.xml | grep '<groupId>' | sed 's/.*>\(.*\)<.*/\1/g')
+}
+
