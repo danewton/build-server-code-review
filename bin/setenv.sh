@@ -62,6 +62,13 @@ function getGroupId(){
   echo $(head -n 10 pom.xml | grep '<groupId>' | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
+function getPomSCM(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  echo $(grep -A 3 '<scm>' pom.xml | grep '<url>' | sed 's/.*>\(.*\)<.*/\1/g' | sed 's/\(.*\)\(tags\)\(.*\)/\1/g'  | sed 's/\(.*\)\(trunk\)\(.*\)/\1/g'  | sed 's/\(.*\)\(branches\)\(.*\)/\1/g')
+}
+
 function isRelease(){
   for arg in "$@"; do
     if [ "$arg" == "release:release" ]; then
