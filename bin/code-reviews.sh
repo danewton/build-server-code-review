@@ -26,6 +26,3 @@ else
   exit 1
 fi
 
-
-/opt/soa/adm/products/maven/current/bin/mvn "$@"
-
