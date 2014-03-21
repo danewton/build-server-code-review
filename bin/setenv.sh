@@ -11,6 +11,9 @@ if [ "$FOUND_TYPE" != "" ]; then
   TYPE=$FOUND_TYPE
 fi;
 
+
+COMDIR="$(find . -maxdepth 4 -type d -iname 'com' | grep src | grep -vE '(test|resources|webapp)')"
+SRCDIR="$(echo $COMDIR | sed 's/\/com//g')"
 WEBXML=$(find . -type f -iname 'web.xml' | head -n 1)
 WEBLOGICXML=$(find . -type f -iname 'weblogic.xml' | head -n 1)
 
@@ -42,7 +45,7 @@ function getVersion(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
-  echo $(head -n 10 pom.xml | grep '<version>' | sed 's/.*>\(.*\)<.*/\1/g')
+  echo $(grep -C 5 '<name>' pom.xml | grep '<version>' | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
 function getArtifactId(){

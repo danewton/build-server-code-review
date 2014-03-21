@@ -11,8 +11,8 @@ if [ "$TYPE" != "war" ]; then
 fi
 
 if [ ! -f "$WEBXML" ]; then
-  echo "please add a web.xml to this war project."
-  return 1
+ echo "please add a web.xml to this war project."
+ exit 1
 fi
 
 

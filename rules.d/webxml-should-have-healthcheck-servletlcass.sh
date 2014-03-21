@@ -11,8 +11,8 @@ if [ "$TYPE" != "war" ]; then
 fi
 
 if [ $(grep -c "<servlet-class>com.suddenlink.util.HealthCheckServlet</servlet-class>" $WEBXML) -eq 0 ]; then
-  echo "please add the HealthCheckServlet to the web.xml"
-  return 1
+ echo "please add the HealthCheckServlet to the web.xml"
+ exit 1
 fi
 
 
