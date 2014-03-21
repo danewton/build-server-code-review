@@ -41,6 +41,23 @@ function minVersion(){
   fi
 }
 
+function ensureArtifactScope(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  ARTIFACT=$1
+  DESIRED_SCOPE=$2
+  ACTUAL_SCOPE=$(grep -A 3 "<artifactId>$ARTIFACT" pom.xml | grep '<scope>'  | sed 's/.*>\(.*\)<.*/\1/g')
+  if [ $(grep -c "<artifactId>$ARTIFACT" pom.xml) -eq 0 ]; then
+    # artifact does not explicitly exist in the pom
+    return 0
+  fi
+  if [ "$ACTUAL_SCOPE" != "$DESIRED_SCOPE" ]; then
+    echo "Please change the scope of '$ARTIFACT' from '$ACTUAL_SCOPE' to '$DESIRED_SCOPE'"
+    return 1
+  fi
+}
+
 function getVersion(){
   if [ ! -f "pom.xml" ]; then
     return 0
