@@ -72,3 +72,17 @@ function isRelease(){
   echo false
 }
 
+function isPulseModule(){
+  if [ $(svn info | grep https://svn.suddenlink.cequel3.com/svn/pulse | wc -l) -ne 0 ]; then
+    echo true
+    return 0
+  fi
+  echo false
+  return 1
+}
+
+isPulseModule
+if [ $? -ne 0 ]; then
+ echo "This is a Pulse module, skipping checks for now."
+ exit 1
+fi
