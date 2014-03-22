@@ -34,9 +34,48 @@ function minVersion(){
   fi;
   ARTIFACT=$1
   MINVER=$2
+
+  # check to see if the artifact is even in the pom
+  if [ $(grep -c "artifactId>$ARTIFACT" pom.xml) -eq 0 ]; then
+    return 0
+  fi
+
   VER=$(grep -A 3 "artifactId>$ARTIFACT" pom.xml | grep 'version' | sed 's/.*>\(.*\)<.*/\1/g')
-  if [ "$MINVER" != "$VER" ]; then
-    echo "please update your $1 from '"$VER"' to $MINVER"
+  # if VER is a property, go find its value
+  if [ $(echo "$VER" | grep -c '\$') -ne 0 ]; then
+    VER=$(echo $VER | sed 's/\${\(.*\)}/\1/g')
+    VER=$(grep "<$VER>" pom.xml | sed 's/.*>\(.*\)<.*/\1/g')
+  fi
+  VER=$(echo $VER | sed 's/.RELEASE//g')
+  VER=$(echo $VER | sed 's/.GA//g')
+ 
+  MINVER_MAJ=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/g')
+  ACTVER_MAJ=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/g')
+  if [ "$ACTVER_MAJ" -gt "$MINVER_MAJ" ]; then
+    return 0
+  fi
+  if [ "$ACTVER_MAJ" -lt "$MINVER_MAJ" ]; then
+    echo "please update your $ARTIFACT from '"$VER"' to '$MINVER'"
+    return 1
+  fi
+
+  MINVER_MIN=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\2/g')
+  ACTVER_MIN=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\2/g')
+  if [ "$ACTVER_MIN" -gt "$MINVER_MIN" ]; then
+    return 0
+  fi
+  if [ "$ACTVER_MIN" -lt "$MINVER_MIN" ]; then
+    echo "please update your $ARTIFACT from '"$VER"' to '$MINVER'"
+    return 1
+  fi
+
+  MINVER_PATCH=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\3/g')
+  ACTVER_PATCH=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\3/g')
+  if [ "$ACTVER_PATCH" -gt "$MINVER_PATCH" ]; then
+    return 0
+  fi
+  if [ "$ACTVER_PATCH" -lt "$MINVER_PATCH" ]; then
+    echo "please update your $ARTIFACT from '"$VER"' to '$MINVER'"
     return 1
   fi
 }

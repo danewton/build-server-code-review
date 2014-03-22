@@ -8,14 +8,14 @@ fi
 
 rtn=0
 
-ensureArtifactScope "unitils-dbunit" "test"
+minVersion "slf4j-api" "1.7.6"
 if [ $? -ne 0 ]; then
-  rtn=1
+ rtn=1
 fi
 
-ensureArtifactScope "unitils-spring" "test"
+minVersion "log4j-over-slf4j" "1.7.6"
 if [ $? -ne 0 ]; then
-  rtn=1
+ rtn=1
 fi
 
 exit $rtn
