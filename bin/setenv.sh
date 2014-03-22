@@ -36,11 +36,11 @@ function minVersion(){
   MINVER=$2
 
   # check to see if the artifact is even in the pom
-  if [ $(grep -c "artifactId>$ARTIFACT" pom.xml) -eq 0 ]; then
+  if [ $(grep -C 2 "artifactId>$ARTIFACT" pom.xml | grep -c -C 2 "version") -eq 0 ]; then
     return 0
   fi
 
-  VER=$(grep -A 3 "artifactId>$ARTIFACT" pom.xml | grep 'version' | sed 's/.*>\(.*\)<.*/\1/g')
+  VER=$(grep -A 3 "artifactId>$ARTIFACT" pom.xml | grep -C 2 "version" | grep 'version' | sed 's/.*>\(.*\)<.*/\1/g')
   # if VER is a property, go find its value
   if [ $(echo "$VER" | grep -c '\$') -ne 0 ]; then
     VER=$(echo $VER | sed 's/\${\(.*\)}/\1/g')
