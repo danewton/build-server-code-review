@@ -13,6 +13,13 @@ fi;
 
 POM_SCM_URL=$(getPomSCM)
 SVN_SCM_URL=$(svn info | grep URL | cut -c 6-  | sed 's/\(.*\)\(tags\)\(.*\)/\1/g'  | sed 's/\(.*\)\(trunk\)\(.*\)/\1/g'  | sed 's/\(.*\)\(branches\)\(.*\)/\1/g')
+
+i=$((${#POM_SCM_URL}-1))
+LAST_CHAR=$(echo "${POM_SCM_URL:$i:1}")
+if [ "$LAST_CHAR" != "/" ]; then
+ POM_SCM_URL="$POM_SCM_URL/"
+fi
+
 if [ "$SVN_SCM_URL" != "$POM_SCM_URL" ]; then
  echo "svn : $SVN_SCM_URL"
  echo "pom : $POM_SCM_URL"
