@@ -44,7 +44,7 @@ function minVersion(){
   # if VER is a property, go find its value
   if [ $(echo "$VER" | grep -c '\$') -ne 0 ]; then
     VER=$(echo $VER | sed 's/\${\(.*\)}/\1/g')
-    VER=$(grep "<$VER>" pom.xml | sed 's/.*>\(.*\)<.*/\1/g')
+    VER=$(grep "<$VER>" pom.xml | grep -v '<!--' | sed 's/.*>\(.*\)<.*/\1/g')
   fi
   VER=$(echo $VER | sed 's/.RELEASE//g')
   VER=$(echo $VER | sed 's/.GA//g')
