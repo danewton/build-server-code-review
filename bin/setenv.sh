@@ -101,7 +101,7 @@ function getVersion(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
-  echo $(grep -C 5 '<name>' pom.xml | grep '<version>' | sed 's/.*>\(.*\)<.*/\1/g')
+  echo $(grep -C 5 '<name>' pom.xml | grep '<version>' | head -n 1 | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
 function getArtifactId(){
