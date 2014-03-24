@@ -22,8 +22,19 @@ function pomHas(){
     return 0
   fi;
   ARTIFACT=$1
-  if [ $(grep -c "$ARTIFACT" pom.xml) -eq 0 ]; then
-    echo "please add the $ARTIFACT to the pom.xml"
+  if [ $(grep -c "<artifactId>$ARTIFACT</artifactId>" pom.xml) -eq 0 ]; then
+    echo "please add the '$ARTIFACT' to the pom.xml"
+    return 1
+  fi
+}
+
+function pomHasNot(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  ARTIFACT=$1
+  if [ $(grep -c "<artifactId>$ARTIFACT</artifactId>" pom.xml) -ge 1 ]; then
+    echo "please remove/upgrade the '$ARTIFACT' in the pom.xml"
     return 1
   fi
 }
@@ -46,8 +57,17 @@ function minVersion(){
     VER=$(echo $VER | sed 's/\${\(.*\)}/\1/g')
     VER=$(grep "<$VER>" pom.xml | grep -v '<!--' | sed 's/.*>\(.*\)<.*/\1/g')
   fi
+  VER_ORIG="$VER"
   VER=$(echo $VER | sed 's/.RELEASE//g')
   VER=$(echo $VER | sed 's/.GA//g')
+
+  # fix for 2 numbers, as it junit 4.4
+  if [ $(echo "$MINVER" | grep -o "\." | wc -l) -eq 1 ]; then
+    MINVER="$MINVER.0"
+  fi
+  if [ $(echo "$VER" | grep -o "\." | wc -l) -eq 1 ]; then
+    VER="$VER.0"
+  fi
  
   MINVER_MAJ=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/g')
   ACTVER_MAJ=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/g')
@@ -55,7 +75,7 @@ function minVersion(){
     return 0
   fi
   if [ "$ACTVER_MAJ" -lt "$MINVER_MAJ" ]; then
-    echo "please update your $ARTIFACT from '"$VER"' to '$MINVER'"
+    echo "please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
     return 1
   fi
 
@@ -65,7 +85,7 @@ function minVersion(){
     return 0
   fi
   if [ "$ACTVER_MIN" -lt "$MINVER_MIN" ]; then
-    echo "please update your $ARTIFACT from '"$VER"' to '$MINVER'"
+    echo "please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
     return 1
   fi
 
@@ -75,7 +95,7 @@ function minVersion(){
     return 0
   fi
   if [ "$ACTVER_PATCH" -lt "$MINVER_PATCH" ]; then
-    echo "please update your $ARTIFACT from '"$VER"' to '$MINVER'"
+    echo "please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
     return 1
   fi
 }
