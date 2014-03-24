@@ -8,6 +8,14 @@ REVIEW_HOME=$SCRIPT_DIR/../
 SCRIPT_OUT=/tmp/out$$;
 TMP_LOG=/tmp/log$$;
 
+if [ -f "$SCRIPT_OUT" ]; then
+ rm "$SCRIPT_OUT";
+fi
+
+if [ -f "$TMP_LOG" ]; then
+ rm "$TMP_LOG";
+fi
+
 HEAD_START="$(basename $1)"
 
 $1 $@ >> $SCRIPT_OUT 2>&1;
