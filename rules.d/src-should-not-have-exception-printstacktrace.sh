@@ -10,9 +10,9 @@ if [ "$TYPE" == "pom" ]; then
  exit 0
 fi
 
-if [ $(grep -R '.printStackTrace' $SRCDIR | grep -v '.svn' | wc -l) -ne 0 ]; then
-  echo "Please remove the .printStackTrace calls from the java source directory."
-  grep -nR '.printStackTrace' $SRCDIR | grep -v '.svn'
+if [ $(grep -R '.printStackTrace()' $SRCDIR | grep -v '.svn' | wc -l) -ne 0 ]; then
+  echo "Please remove the .printStackTrace() calls from the java source directory."
+  grep -nR '.printStackTrace()' $SRCDIR | grep -v '.svn'
   exit 1
 fi
 
