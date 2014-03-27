@@ -115,7 +115,7 @@ function ensureArtifactScope(){
   if [ "$ACTUAL_SCOPE" == "$DESIRED_SCOPE" ]; then
     return 0
   fi
-  if [ "$ACTUAL_SCOPE" == "$OPTIONAL_SCOPE" ]; then
+  if [[ "$OPTIONAL_SCOPE" != "" && "$ACTUAL_SCOPE" == "$OPTIONAL_SCOPE" ]]; then
     return 0
   fi
 
