@@ -6,11 +6,23 @@ REVIEW_HOME=$SCRIPT_DIR/../
 # set -e
 rtnfile=/tmp/rtn$$
 
-PROC_CNT="8"
-RPLCMENT='{}';
-SH_CMD='TMP_LOG=/tmp/log$$; if [ -f "$TMP_LOG" ]; then rm "$TMP_LOG"; fi; '$SCRIPT_DIR'/script-runner.sh {} '$rtnfile' '$@' >> $TMP_LOG 2>&1; cat $TMP_LOG; rm "$TMP_LOG"'
+function xargsRunner(){
+ SCRIPT_DIR=$1
+ TGT=$2
+ RTNFILE=$3
 
-find $REVIEW_HOME/rules.d/*.sh | xargs -P $PROC_CNT -n 1 -I "$RPLCMENT" sh -c "$SH_CMD"
+ TMP_LOG=/tmp/log$$;
+ if [ -f $TMP_LOG ]; then
+  rm $TMP_LOG;
+ fi;
+ $SCRIPT_DIR/script-runner.sh $TGT $RTNFILE $@ >> $TMP_LOG 2>&1;
+ cat "$TMP_LOG";
+ rm "$TMP_LOG";
+}
+
+export -f xargsRunner;
+
+find $REVIEW_HOME/rules.d/*.sh | xargs -P 8 -n 1 -I "{}" sh -c "xargsRunner $SCRIPT_DIR {} $rtnfile $@"
 
 if [ -f $rtnfile ]; then
   rtn=$(cat $rtnfile)
