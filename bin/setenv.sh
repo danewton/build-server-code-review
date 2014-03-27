@@ -106,15 +106,25 @@ function ensureArtifactScope(){
   fi;
   ARTIFACT=$1
   DESIRED_SCOPE=$2
+  OPTIONAL_SCOPE=$3
   ACTUAL_SCOPE=$(grep -A 3 "<artifactId>$ARTIFACT" pom.xml | grep '<scope>'  | sed 's/.*>\(.*\)<.*/\1/g')
-  if [ $(grep -c "<artifactId>$ARTIFACT" pom.xml) -eq 0 ]; then
+  if [ $(grep -A 2 "<artifactId>$ARTIFACT" pom.xml | grep '<version>' | wc -l) -eq 0 ]; then
     # artifact does not explicitly exist in the pom
     return 0
   fi
-  if [ "$ACTUAL_SCOPE" != "$DESIRED_SCOPE" ]; then
-    echo "Please change the scope of '$ARTIFACT' from '$ACTUAL_SCOPE' to '$DESIRED_SCOPE'"
-    return 1
+  if [ "$ACTUAL_SCOPE" == "$DESIRED_SCOPE" ]; then
+    return 0
   fi
+  if [ "$ACTUAL_SCOPE" == "$OPTIONAL_SCOPE" ]; then
+    return 0
+  fi
+
+  MSG="Please change the scope of '$ARTIFACT' from '$ACTUAL_SCOPE' to '$DESIRED_SCOPE'"
+  if [ "$OPTIONAL_SCOPE" != "" ]; then
+    MSG="$MSG or '$OPTIONAL_SCOPE'"
+  fi
+  echo $MSG
+  return 1
 }
 
 function getVersion(){
