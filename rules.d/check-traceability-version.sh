@@ -6,6 +6,11 @@ if [ "$IS_MVN" == "false" ]; then
  exit 0
 fi
 
+ARTIFACT_ID=$(getArtifactId)
+if [ "$ARTIFACT_ID" == "traceability" ]; then
+ exit 0
+fi
+
 rtn=0
 
 minVersion "traceability" "1.0.8"
