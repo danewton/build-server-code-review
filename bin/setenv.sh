@@ -157,7 +157,7 @@ function getPomSCM(){
 
 function isRelease(){
   for arg in "$@"; do
-    if [ "$arg" == "release:release" ]; then
+    if [ "$arg" == "release:perform" ]; then
       echo true
       return 0
     fi;
