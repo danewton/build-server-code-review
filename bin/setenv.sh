@@ -16,7 +16,7 @@ COMDIR="$(find . -maxdepth 4 -type d -iname 'com' | grep src | grep -vE '(test|r
 SRCDIR="$(echo $COMDIR | sed 's/\/com//g')"
 WEBXML=$(find . -type f -iname 'web.xml' | head -n 1)
 WEBLOGICXML=$(find . -type f -iname 'weblogic.xml' | head -n 1)
-WEBINFDIR="$(dirname $(find . -type f -iname 'web.xml' | head -n 1))"
+WEBINFDIR="$(find . -type d -iname 'WEB-INF' | head -n 1)"
 
 function pomHas(){
   if [ ! -f "pom.xml" ]; then
