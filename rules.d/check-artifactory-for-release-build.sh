@@ -14,7 +14,7 @@ LIBS_RELEASE_URL="http://artifactory.suddenlink.cequel3.com/artifactory/libs-rel
 VER=$(getVersion)
 ARTID=$(getArtifactId)
 GRPID=$(getGroupId | sed 's/\./\//g')
-IS_REL=$(isRelease "$@")
+IS_REL=$(isRelease $@)
 if [ "$IS_REL" == "true" ]; then
   VER=$(echo $VER | sed 's/-SNAPSHOT//g')
 fi;

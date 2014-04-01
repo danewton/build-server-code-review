@@ -22,7 +22,8 @@ function xargsRunner(){
 
 export -f xargsRunner;
 
-find $REVIEW_HOME/rules.d/*.sh | xargs -P 8 -n 1 -I "{}" sh -c "xargsRunner $SCRIPT_DIR {} $rtnfile $@"
+ORIG_ARGS="$@"
+find $REVIEW_HOME/rules.d/*.sh | xargs -P 8 -n 1 -I "{}" sh -c "xargsRunner $SCRIPT_DIR {} $rtnfile $ORIG_ARGS"
 
 if [ -f $rtnfile ]; then
   rtn=$(cat $rtnfile)

@@ -6,7 +6,7 @@ if [ "$IS_MVN" == "false" ]; then
  exit 0
 fi
 
-IS_REL=$(isRelease "$@")
+IS_REL=$(isRelease $@)
 if [ "$IS_REL" != "true" ]; then
  exit 0
 fi;
