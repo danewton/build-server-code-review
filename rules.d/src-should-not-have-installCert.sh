@@ -11,7 +11,7 @@ if [[ "$TYPE" != "war" && "$TYPE" != "jar" ]]; then
 fi
 
 if [ $(find $SRCDIR -type f -iname 'InstallCert.java' | wc -l) -ne 0 ]; then
-  echo "please remove the InstallCert.java class from the java source directory."
+  echo "Please remove the InstallCert.java class from the java source directory."
   exit 1
 fi
 

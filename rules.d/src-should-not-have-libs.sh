@@ -15,7 +15,7 @@ if [ "$WEBINFDIR" == "" ]; then
 fi
 
 if [ $(find $WEBINFDIR -type f -iname '*.jar' | wc -l) -ne 0 ]; then
-  echo "please remove the Jars from the java source directory."
+  echo "Please remove the Jars from the java source directory."
   find $WEBINFDIR -type f -iname '*.jar';
   exit 1
 fi

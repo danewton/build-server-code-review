@@ -15,7 +15,7 @@ if [ "$WEBINFDIR" == "" ]; then
 fi
 
 if [ $(find $WEBINFDIR -type f -iname '*.class' | wc -l) -ne 0 ]; then
-  echo "please remove the compiled class files from the java source directory."
+  echo "Please remove the compiled class files from the java source directory."
   find $WEBINFDIR -type f -iname '*.class';
   exit 1
 fi
