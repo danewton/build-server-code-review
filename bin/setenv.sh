@@ -48,11 +48,11 @@ function minVersion(){
   MINVER=$2
 
   # check to see if the artifact is even in the pom
-  if [ $(grep -C 2 "artifactId>$ARTIFACT" pom.xml | grep -c -C 2 "version") -eq 0 ]; then
+  if [ $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg' | perl -i -pe 'BEGIN{undef $/;} s/<build>.*?<\/build>//smg' | perl -i -pe 'BEGIN{undef $/;} s/<exclusions>.*?<\/exclusions>//smg' | grep -C 2 "artifactId>$ARTIFACT" | grep -c -C 2 "version") -eq 0 ]; then
     return 0
   fi
 
-  VER=$(grep -A 3 "artifactId>$ARTIFACT" pom.xml | grep -C 2 "version" | grep 'version' | sed 's/.*>\(.*\)<.*/\1/g' | head -n 1)
+  VER=$(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg' | perl -i -pe 'BEGIN{undef $/;} s/<build>.*?<\/build>//smg' | perl -i -pe 'BEGIN{undef $/;} s/<exclusions>.*?<\/exclusions>//smg' | grep -A 3 "artifactId>$ARTIFACT" | grep -C 2 "version" | grep 'version' | sed 's/.*>\(.*\)<.*/\1/g' | head -n 1)
   # if VER is a property, go find its value
   if [ $(echo "$VER" | grep -c '\$') -ne 0 ]; then
     VER=$(echo $VER | sed 's/\${\(.*\)}/\1/g')
@@ -108,8 +108,8 @@ function ensureArtifactScope(){
   ARTIFACT=$1
   DESIRED_SCOPE=$2
   OPTIONAL_SCOPE=$3
-  ACTUAL_SCOPE=$(grep -A 3 "<artifactId>$ARTIFACT" pom.xml | grep '<scope>'  | sed 's/.*>\(.*\)<.*/\1/g')
-  if [ $(grep -A 2 "<artifactId>$ARTIFACT" pom.xml | grep '<version>' | wc -l) -eq 0 ]; then
+  ACTUAL_SCOPE=$(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg' | perl -i -pe 'BEGIN{undef $/;} s/<build>.*?<\/build>//smg' | perl -i -pe 'BEGIN{undef $/;} s/<exclusions>.*?<\/exclusions>//smg' | grep -A 3 "<artifactId>$ARTIFACT" | grep '<scope>'  | sed 's/.*>\(.*\)<.*/\1/g')
+  if [ $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg' | perl -i -pe 'BEGIN{undef $/;} s/<build>.*?<\/build>//smg' | perl -i -pe 'BEGIN{undef $/;} s/<exclusions>.*?<\/exclusions>//smg' | grep -A 2 "<artifactId>$ARTIFACT" | grep '<version>' | wc -l) -eq 0 ]; then
     # artifact does not explicitly exist in the pom
     return 0
   fi
