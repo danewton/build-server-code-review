@@ -10,7 +10,7 @@ if [ "$TYPE" == "pom" ]; then
  exit 0
 fi
 
-LOGBACK_MAX_HIST="$(grep 'maxHistory' $(find src/main -type f | grep -v '.svn' | egrep '.*log.*(\.xml|\.properties)') | head -n 1 | sed 's/.*>\(.*\)<.*/\1/g')"
+LOGBACK_MAX_HIST="$(grep 'maxHistory' $(find src/main -type f | grep -v '.svn' | egrep '.*logback.xml') | head -n 1 | sed 's/.*>\(.*\)<.*/\1/g')"
 if [[ "$LOGBACK_MAX_HIST" != "" && "$LOGBACK_MAX_HIST" -gt "10" ]]; then
   echo "Please update your logback config to keep no more than 10 rolled history files (value found : $LOGBACK_MAX_HIST)."
   exit 1
