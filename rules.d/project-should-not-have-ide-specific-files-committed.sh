@@ -14,20 +14,20 @@ MSG="Please remove your IDE specific settings from the project, so that other te
 
 if [ -d ".settings" ]; then
  echo $MSG
-# exit 0
+ exit 3
 fi
 
 if [ -d ".idea" ]; then
  echo $MSG
-# exit 0
+ exit 3
 fi
 
 if [ -d ".nb" ]; then
  echo $MSG
-# exit 0
+ exit 3
 fi
 
 if [ -d ".gradle" ]; then
  echo $MSG
-# exit 0
+ exit 3
 fi
