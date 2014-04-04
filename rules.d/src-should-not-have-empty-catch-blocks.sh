@@ -13,6 +13,11 @@ fi
 rtn="0";
 
 # if you pipe the find results into the while-loop, it will create a sub-shell, and not persist the changes to $rtn outside the loop
+list="$(find src/main/java -type f -iname '*.java' -not -iwholename '*.svn*' -exec grep -l 'catch' {} \;)"
+if [ "$list" == "" ]; then
+ exit 0
+fi;
+
 while read f; do
   GRP_RST=$(cat "$f" | perl -i -pe 's/\/\/.*$//g; s/^\s*$//g; s/^\s*}/}/mg; tr/\015//d; chomp; s/\s*{\s*}/{}/g; s/catch/\ncatch/g; s/}/}\n/g' | grep 'catch.*{}' | wc -l)
   if [[ "$GRP_RST" != "" && "$GRP_RST" -ge "1" ]]; then
@@ -22,7 +27,7 @@ while read f; do
     fi;
     echo "$GRP_RST empty catch blocks in $f"
   fi
-done <<< "$(find src/main/java -type f -iname '*.java' -not -iwholename '*.svn*' -exec grep -l 'catch' {} \;)"
+done <<< "$list"
 
 exit $rtn
 

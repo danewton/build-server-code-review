@@ -59,6 +59,7 @@ function minVersion(){
     VER=$(grep "<$VER>" pom.xml | grep -v '<!--' | sed 's/.*>\(.*\)<.*/\1/g')
   fi
   VER_ORIG="$VER"
+  VER=$(echo $VER | sed 's/-SNAPSHOT//g')
   VER=$(echo $VER | sed 's/.RELEASE//g')
   VER=$(echo $VER | sed 's/.GA//g')
 
