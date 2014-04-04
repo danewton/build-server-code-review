@@ -22,7 +22,7 @@ while read f; do
     fi;
     echo "$GRP_RST empty catch blocks in $f"
   fi
-done <<< "$(find src/main/java -type f -iname '*.java')"
+done <<< "$(find src/main/java -type f -iname '*.java' -not -iwholename '*.svn*' -exec grep -l 'catch' {} \;)"
 
 exit $rtn
 
