@@ -174,8 +174,4 @@ function isPulseModule(){
   return 1
 }
 
-isPulseModule
-if [ $? -ne 1 ]; then
- echo "This is a Pulse module, skipping checks for now."
- exit 0
-fi
+

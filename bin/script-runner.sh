@@ -25,6 +25,10 @@ trap "cleanLogs" EXIT
 cleanLogs; # start with a clean slate
 $1 $@ >> $SCRIPT_OUT 2>&1;
 RSLT="$?"
+if [ "$RSLT" -eq 4 ]; then
+ printf "%-75s%-15s\n" $STATUS_LINE_START "SKIPPING" >> $TMP_LOG
+fi;
+
 if [ "$RSLT" -eq 3 ]; then
  printf "%-75s%-15s\n" $STATUS_LINE_START "WARNING" >> $TMP_LOG
 fi;

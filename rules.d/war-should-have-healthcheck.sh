@@ -10,6 +10,11 @@ if [ "$TYPE" != "war" ]; then
  exit 0
 fi
 
+isPulseModule
+if [ $? -ne 1 ]; then
+ exit 0
+fi
+
 pomHas "healthcheck-servlet"
 if [ $? -ne 0 ]; then
  exit 1
