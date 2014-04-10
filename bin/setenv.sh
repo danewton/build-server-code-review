@@ -12,7 +12,7 @@ if [ "$FOUND_TYPE" != "" ]; then
 fi;
 
 
-COMDIR="$(find . -maxdepth 4 -type d -iname 'com' | grep src | grep -vE '(test|resources|webapp)')"
+COMDIR="$(find . -maxdepth 4 -type d -iname 'com' | grep src | grep -vE '(test|resources|webapp)' | head -n 1)"
 SRCDIR="$(echo $COMDIR | sed 's/\/com//g')"
 WEBXML=$(find . -type f -iname 'web.xml' | head -n 1)
 WEBLOGICXML=$(find . -type f -iname 'weblogic.xml' | head -n 1)
