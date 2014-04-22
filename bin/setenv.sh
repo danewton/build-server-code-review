@@ -45,10 +45,10 @@ function pomHasNot(){
     return 0
   fi;
   ARTIFACT=$1
-  if [ $(grep -c "<artifactId>$ARTIFACT</artifactId>" pom.xml) -ge 1 ]; then
-    echo "please remove/upgrade the '$ARTIFACT' in the pom.xml"
+  if [ $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg;s/<build>.*?<\/build>//smg;s/<exclusions>.*?<\/exclusions>//smg;s/<scm>.*?<\/scm>//smg;s/<parent>.*?<\/parent>//smg' | grep -c "<artifactId>$ARTIFACT</artifactId>") -ge 1 ]; then
     return 1
   fi
+  return 0
 }
 
 function minVersion(){
