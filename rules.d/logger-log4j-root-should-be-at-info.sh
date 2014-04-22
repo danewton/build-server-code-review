@@ -18,7 +18,7 @@ if [ -f "src/main/resources/log4j.properties" ]; then
 fi
 
 if [ -f "src/main/resources/log4j.xml" ]; then
-  if [ $(cat src/main/resources/log4j.xml  | perl -i -pe 'BEGIN{undef $/;} s/.*(<root>.*?<\/root>).*/\1/smg' | grep -i '<level value="info"/>' | wc -l) -ne 1 ]; then
+  if [ $(cat src/main/resources/log4j.xml  | perl -i -pe 'BEGIN{undef $/;} s/.*(<root>.*?<\/root>).*/\1/smg' | grep -Ei '<level value="info".?/>' | wc -l) -ne 1 ]; then
     echo 'Please place the root logger at INFO level : <level value="info"/>. See http://en.wikipedia.org/wiki/Log4j regarding priority -vs- level.'
     exit 1
   fi
