@@ -1,5 +1,9 @@
 #!/bin/bash
 
+EXIT_GOOD=0
+EXIT_ERROR=1
+EXIT_WARN=3
+
 IS_MVN=false
 if [ -f "pom.xml" ]; then
  IS_MVN=true
@@ -179,6 +183,14 @@ function isPulseModule(){
     return 0
   fi
   return 1
+}
+
+TODAY="$(date +%Y%m%d)"
+function isAfter(){
+  if [ $TODAY -ge $1 ]; then
+    return 1
+  fi;
+  return 0
 }
 
 
