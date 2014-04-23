@@ -61,11 +61,11 @@ function minVersion(){
   MINVER=$2
 
   # check to see if the artifact is even in the pom
-  if [ $(grep ":$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -eq 0 ]; then  
+  if [ $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -eq 0 ]; then  
     return 0
   fi
 
-  VER=$(grep ":$ARTIFACT:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\4/g;s/(.*?) .*/\1/g')  
+  VER=$(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\4/g;s/(.*?) .*/\1/g')  
   VER_ORIG="$VER"
   VER=$(echo $VER | sed 's/-SNAPSHOT//g')
   VER=$(echo $VER | sed 's/.RELEASE//g')
