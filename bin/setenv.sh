@@ -117,7 +117,7 @@ function ensureArtifactScope(){
   ARTIFACT=$1
   DESIRED_SCOPE=$2
   OPTIONAL_SCOPE=$3
-  ACTUAL_SCOPE=$(grep ":$1:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\5/g;s/(.*?) .*/\1/g')
+  ACTUAL_SCOPE=$(grep -E "\[.*:$1:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\5/g;s/(.*?) .*/\1/g')
   if [ "$ACTUAL_SCOPE" == "" ]; then
     # artifact does not explicitly exist for this build
     return 0
