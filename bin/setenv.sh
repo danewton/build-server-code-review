@@ -3,6 +3,8 @@
 EXIT_GOOD=0
 EXIT_ERROR=1
 EXIT_WARN=3
+DEPENDENCIES_FILE="dependencies.txt"
+
 
 IS_MVN=false
 if [ -f "pom.xml" ]; then
@@ -120,9 +122,9 @@ function ensureArtifactScope(){
   ARTIFACT=$1
   DESIRED_SCOPE=$2
   OPTIONAL_SCOPE=$3
-  ACTUAL_SCOPE=$(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg' | perl -i -pe 'BEGIN{undef $/;} s/<build>.*?<\/build>//smg' | perl -i -pe 'BEGIN{undef $/;} s/<exclusions>.*?<\/exclusions>//smg' | grep -A 3 "<artifactId>$ARTIFACT" | grep '<scope>'  | sed 's/.*>\(.*\)<.*/\1/g')
-  if [ $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg' | perl -i -pe 'BEGIN{undef $/;} s/<build>.*?<\/build>//smg' | perl -i -pe 'BEGIN{undef $/;} s/<exclusions>.*?<\/exclusions>//smg' | grep -A 2 "<artifactId>$ARTIFACT" | grep '<version>' | wc -l) -eq 0 ]; then
-    # artifact does not explicitly exist in the pom
+  ACTUAL_SCOPE=$(grep ":$1:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\5/g')
+  if [ "$ACTUAL_SCOPE" == "" ]; then
+    # artifact does not explicitly exist for this build
     return 0
   fi
   if [ "$ACTUAL_SCOPE" == "$DESIRED_SCOPE" ]; then

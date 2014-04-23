@@ -20,9 +20,9 @@ if [ $? -eq 0 ]; then
   ERR_RSLT=$EXIT_WARN
 fi
 
-if [ $(grep 'compile' dependencies.txt | grep -v 'scope not updated' | perl -i -pe 's/.* .*:(.*):jar:.*:compile/\1/g' | sort | uniq -c | grep -v 1 | wc -l) -ne 0 ]; then
+if [ $(grep 'compile' $DEPENDENCIES_FILE | grep -v 'scope not updated' | perl -i -pe 's/.* .*:(.*):jar:.*:compile/\1/g' | sort | uniq -c | grep -v 1 | wc -l) -ne 0 ]; then
   echo "Please update/correct your dependencies, duplicate jars (with different versions) were found in your build. $RULE_MSG"
-  grep 'compile' dependencies.txt | grep -v 'scope not updated' | perl -i -pe 's/.* .*:(.*):jar:.*:compile/\1/g' | sort | uniq -c | grep -v 1
+  grep 'compile' $DEPENDENCIES_FILE | grep -v 'scope not updated' | perl -i -pe 's/.* .*:(.*):jar:.*:compile/\1/g' | sort | uniq -c | grep -v 1
   exit $ERR_RSLT
 fi
 
