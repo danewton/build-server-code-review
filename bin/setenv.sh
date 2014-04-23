@@ -61,16 +61,11 @@ function minVersion(){
   MINVER=$2
 
   # check to see if the artifact is even in the pom
-  if [ $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg' | perl -i -pe 'BEGIN{undef $/;} s/<build>.*?<\/build>//smg' | perl -i -pe 'BEGIN{undef $/;} s/<exclusions>.*?<\/exclusions>//smg' | grep -C 2 "artifactId>$ARTIFACT<" | grep -c -C 2 "version") -eq 0 ]; then
+  if [ $(grep ":$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -eq 0 ]; then  
     return 0
   fi
 
-  VER=$(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg' | perl -i -pe 'BEGIN{undef $/;} s/<build>.*?<\/build>//smg' | perl -i -pe 'BEGIN{undef $/;} s/<exclusions>.*?<\/exclusions>//smg' | grep -A 3 "artifactId>$ARTIFACT<" | grep -C 2 "version" | grep 'version' | sed 's/.*>\(.*\)<.*/\1/g' | head -n 1)
-  # if VER is a property, go find its value
-  if [ $(echo "$VER" | grep -c '\$') -ne 0 ]; then
-    VER=$(echo $VER | sed 's/\${\(.*\)}/\1/g')
-    VER=$(grep "<$VER>" pom.xml | grep -v '<!--' | sed 's/.*>\(.*\)<.*/\1/g')
-  fi
+  VER=$(grep ":$ARTIFACT:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\4/g;s/(.*?) .*/\1/g')  
   VER_ORIG="$VER"
   VER=$(echo $VER | sed 's/-SNAPSHOT//g')
   VER=$(echo $VER | sed 's/.RELEASE//g')

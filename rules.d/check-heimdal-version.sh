@@ -11,7 +11,7 @@ if [ "$ARTIFACT_ID" == "heimdall" ]; then
  exit 0
 fi
 
-minVersion "heimdal" "1.0.3"
+minVersion "heimdall" "1.0.3"
 if [ $? -ne 0 ]; then
  exit 1
 fi

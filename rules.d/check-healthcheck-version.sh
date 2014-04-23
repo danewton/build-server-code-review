@@ -15,7 +15,7 @@ if [ "$ARTIFACT_ID" == "healthcheck" ]; then
  exit 0
 fi
 
-minVersion "healthcheck" "1.0.9"
+minVersion "healthcheck-servlet" "1.0.9"
 if [ $? -ne 0 ]; then
  exit 1
 fi
