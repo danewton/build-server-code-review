@@ -26,12 +26,12 @@ trap "cleanUp" EXIT
 svn ls $SVN_SCM_URL > $TMP_SVN_OUT;
 
 if [ "$(grep -c 'branches' $TMP_SVN_OUT)" != 1 ]; then
- echo "Please ensure that the SVN repo has the standard directorie of (trunk,tags,branches)."
+ echo "Please ensure that the SVN repo has the standard directories of (trunk,tags,branches)."
  exit 1
 fi;
 
 if [ "$(grep -c 'tags' $TMP_SVN_OUT)" != 1 ]; then
- echo "Please ensure that the SVN repo has the standard directorie of (trunk,tags,branches)."
+ echo "Please ensure that the SVN repo has the standard directories of (trunk,tags,branches)."
  exit 1
 fi;
 
