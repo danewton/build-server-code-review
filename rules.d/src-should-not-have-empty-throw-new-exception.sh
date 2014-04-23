@@ -12,7 +12,7 @@ fi
 
 ERR_RSLT=$EXIT_ERROR
 
-FAIL_DATE="20140422"
+FAIL_DATE="20140522"
 RULE_MSG="[This rule will go from a WARNING to a FAILED for builds on (and after) $FAIL_DATE.]"
 
 isAfter $FAIL_DATE
