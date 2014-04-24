@@ -16,7 +16,8 @@ if [ $? -ne 1 ]; then
 fi
 
 pomHas "healthcheck-servlet"
-if [ $? -ne 0 ]; then
+if [ $? -ne 1 ]; then
+ echo "please add the 'healthcheck-servlet' to the pom.xml"
  exit 1
 fi
 

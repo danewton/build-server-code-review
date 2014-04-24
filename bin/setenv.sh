@@ -37,9 +37,9 @@ function pomHas(){
   fi;
   ARTIFACT=$1
   if [ $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -eq 0 ]; then
-    echo "please add the '$ARTIFACT' to the pom.xml"
-    return 1
+    return 0
   fi
+  return 1
 }
 
 function pomHasNot(){
