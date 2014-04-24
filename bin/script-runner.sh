@@ -27,16 +27,18 @@ $1 $@ >> $SCRIPT_OUT 2>&1;
 RSLT="$?"
 if [ "$RSLT" -eq 4 ]; then
  printf "%-75s%-15s\n" $STATUS_LINE_START "SKIPPING" >> $TMP_LOG
+ echo "4" >> $2;
 fi;
 
 if [ "$RSLT" -eq 3 ]; then
  printf "%-75s%-15s\n" $STATUS_LINE_START "WARNING" >> $TMP_LOG
+ echo "3" >> $2;
 fi;
 
 if [ "$RSLT" -eq 1 ]; then
  printf "%-75s%-15s\n" $STATUS_LINE_START "FAILED" >> $TMP_LOG
  # do something to stop the build
- echo "1" > $2;
+ echo "1" >> $2;
 fi;
 
 if [ "$RSLT" -eq 0 ]; then
