@@ -36,7 +36,7 @@ function pomHas(){
     return 0
   fi;
   ARTIFACT=$1
-  if [ $(grep -c "<artifactId>$ARTIFACT</artifactId>" pom.xml) -eq 0 ]; then
+  if [ $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -eq 0 ]; then
     echo "please add the '$ARTIFACT' to the pom.xml"
     return 1
   fi
@@ -47,7 +47,7 @@ function pomHasNot(){
     return 0
   fi;
   ARTIFACT=$1
-  if [ $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg;s/<build>.*?<\/build>//smg;s/<exclusions>.*?<\/exclusions>//smg;s/<scm>.*?<\/scm>//smg;s/<parent>.*?<\/parent>//smg' | grep -c "<artifactId>$ARTIFACT</artifactId>") -ge 1 ]; then
+  if [ $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -ge 1 ]; then
     return 1
   fi
   return 0
@@ -188,6 +188,23 @@ function isAfter(){
     return 1
   fi;
   return 0
+}
+
+function pomHasBoth(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  ARTIFACT_1=$1
+  ARTIFACT_2=$2
+  EXTRA_MSG=$3
+  if [[ $(grep -E "\[.*:$ARTIFACT_1:" $DEPENDENCIES_FILE | wc -l) -ge 1 && $(grep -E "\[.*:$ARTIFACT_2:" $DEPENDENCIES_FILE | wc -l) -ge 1 ]]; then
+    MSG="Found both $ARTIFACT_1 and $ARTIFACT_2 in your build. Please resolve your dependencies."
+    if [ "$EXTRA_MSG" != "" ]; then
+      MSG="$MSG $EXTRA_MSG"
+    fi
+    echo $MSG
+    return 1
+  fi
 }
 
 
