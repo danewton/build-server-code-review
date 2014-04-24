@@ -62,7 +62,7 @@ if [ "$HAS_WARNINGS" -ge 1 ]; then
   echo "final checks found code review WARNINGS, please review them for any time-sensitive issues."
   emailWarnings
   cleanupEmailBody
-  exit 3
+  exit 0
 fi
 
 echo "final checks ended with SUCCESS"
