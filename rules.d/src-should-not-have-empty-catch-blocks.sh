@@ -19,7 +19,7 @@ if [ "$list" == "" ]; then
 fi;
 
 while read f; do
-  GRP_RST=$(cat "$f" | perl -i -pe 's/\/\/.*$//g; s/^\s*$//g; s/^\s*}/}/mg; tr/\015//d; chomp; s/\s*{\s*}/{}/g; s/catch/\ncatch/g; s/}/}\n/g' | grep 'catch.*{}' | wc -l)
+  GRP_RST=$(cat "$f" | perl -i -pe 's/\/\/.*$//g; s/^\s*$//g; s/^\s*}/}/mg; tr/\015//d; chomp; s/\s*{\s*}/{}/g; s/catch/\ncatch/g; s/}/}\n/g' | grep 'catch.*)\s*{}' | wc -l)
   if [[ "$GRP_RST" != "" && "$GRP_RST" -ge "1" ]]; then
     if [ "$rtn" -eq 0 ]; then
       echo "Some empty catch-blocks may make sense, like a NumberFormatExceptions or exceptions within utiity classes; however, empty catch-blocks within business logic are generally deemed as a bad idea, simply because when (not if) an issue arises within that flow of execution, there's little to no indication within the logs to help determine what happened.  Our recommendation is to review these findings, and if they are business logic, you are strongly encouraged to put some kind of logging statement in there - even if it's a one-liner with no stacktrace.";
