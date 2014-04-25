@@ -33,7 +33,9 @@ if [ -f $rtnfile ]; then
 fi
 
 function emailWarnings(){
-  LAST_COMMITTER=$(svn info | grep Author | perl -i -pe 's/.*: (.*)/\1/g' | grep '\.')
+  LAST_COMMITTER=$(svn info | grep Author: | cut -d' ' -f2 | grep '\.')
+  PROJECT="$(svn info | grep URL: | cut -d' ' -f2)"
+  REVISION="$(svn info | grep Revision: | cut -d' ' -f2)"
   if [ "$LAST_COMMITTER" == "" ]; then
     echo "no valid last committer found; not sending email."
     return
@@ -42,7 +44,7 @@ function emailWarnings(){
     echo "hostname is not from the build server, not sending an email; found $(hostname)."
     return
   fi
-  cat $emailBody | grep -v 'PASS' | mail -s "WARNINGS found during build" $LAST_COMMITTER@Suddenlink.com
+  cat $emailBody | grep -v 'PASS' | mail -s "WARNINGS found during build for $PROJECT:$REVISION" $LAST_COMMITTER@Suddenlink.com
 }
 
 function cleanupEmailBody(){
