@@ -46,6 +46,11 @@ if [ $? -ne 0 ]; then
  rtn=1
 fi
 
+minVersion "spring-context" $MIN_SPRING_VERSION
+if [ $? -ne 0 ]; then
+ rtn=1
+fi
+
 minVersion "spring-context-support" $MIN_SPRING_VERSION
 if [ $? -ne 0 ]; then
  rtn=1
