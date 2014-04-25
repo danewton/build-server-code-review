@@ -33,7 +33,7 @@ if [ -f $rtnfile ]; then
 fi
 
 function emailWarnings(){
-  LAST_COMMITTER=$(svn info | grep Author: | cut -d' ' -f2 | grep '\.')
+  LAST_COMMITTER=$(svn info | grep Author: | perl -i -pe 's/.*: (.*)/\1/g' | grep '\.')
   PROJECT="$(svn info | grep URL: | cut -d' ' -f2)"
   REVISION="$(svn info | grep Revision: | cut -d' ' -f2)"
   if [ "$LAST_COMMITTER" == "" ]; then
