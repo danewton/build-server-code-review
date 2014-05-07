@@ -10,7 +10,7 @@ if [ "$TYPE" != "war" ]; then
  exit 0
 fi
 
-ARTIFACT_ID=$(getArtifactId)
+ARTIFACT_ID=$(getPomArtifactId)
 if [ "$ARTIFACT_ID" == "healthcheck" ]; then
  exit 0
 fi

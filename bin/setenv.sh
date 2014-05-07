@@ -137,21 +137,21 @@ function ensureArtifactScope(){
   return 1
 }
 
-function getVersion(){
+function getPomVersion(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
   echo $(grep -C 5 '<name>' pom.xml | grep '<version>' | head -n 1 | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
-function getArtifactId(){
+function getPomArtifactId(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
   echo $(head -n 10 pom.xml | grep '<artifactId>' | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
-function getGroupId(){
+function getPomGroupId(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;

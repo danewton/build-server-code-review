@@ -6,7 +6,7 @@ if [ "$IS_MVN" == "false" ]; then
  exit 0
 fi
 
-ARTIFACT_ID=$(getArtifactId)
+ARTIFACT_ID=$(getPomArtifactId)
 if [ "$ARTIFACT_ID" == "traceability" ]; then
  exit 0
 fi

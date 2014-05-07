@@ -11,9 +11,9 @@ if [ "$TYPE" == "pom" ]; then
 fi;
 
 LIBS_RELEASE_URL="http://artifactory.suddenlink.cequel3.com/artifactory/libs-release-local"
-VER=$(getVersion)
-ARTID=$(getArtifactId)
-GRPID=$(getGroupId | sed 's/\./\//g')
+VER=$(getPomVersion)
+ARTID=$(getPomArtifactId)
+GRPID=$(getPomGroupId | sed 's/\./\//g')
 IS_REL=$(isRelease $@)
 if [ "$IS_REL" == "true" ]; then
   VER=$(echo $VER | sed 's/-SNAPSHOT//g')

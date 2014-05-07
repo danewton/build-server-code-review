@@ -6,7 +6,7 @@ if [ "$IS_MVN" == "false" ]; then
  exit 0
 fi
 
-VER=$(getVersion)
+VER=$(getPomVersion)
 IS_REL_BLD=$(isRelease $@)
 IS_SNAPSHOT=$(echo $VER | grep -e '-SNAPSHOT' | wc -l)
 if [[ "$IS_REL_BLD" == "true" && $IS_SNAPSHOT -ne 1 ]]; then
