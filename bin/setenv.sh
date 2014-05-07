@@ -141,21 +141,21 @@ function getPomVersion(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
-  echo $(grep -C 5 '<name>' pom.xml | grep '<version>' | head -n 1 | sed 's/.*>\(.*\)<.*/\1/g')
+  echo $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg;s/<build>.*?<\/build>//smg;s/<dependencies>.*?<\/dependencies>//smg;;s/<parent>.*?<\/parent>//smg;s/<scm>.*?<\/scm>//smg' | grep '<version>' | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
 function getPomArtifactId(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
-  echo $(head -n 10 pom.xml | grep '<artifactId>' | sed 's/.*>\(.*\)<.*/\1/g')
+  echo $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg;s/<build>.*?<\/build>//smg;s/<dependencies>.*?<\/dependencies>//smg;;s/<parent>.*?<\/parent>//smg;s/<scm>.*?<\/scm>//smg' | grep '<artifactId>' | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
 function getPomGroupId(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
-  echo $(head -n 10 pom.xml | grep '<groupId>' | sed 's/.*>\(.*\)<.*/\1/g')
+  echo $(cat pom.xml | perl -i -pe 'BEGIN{undef $/;} s/<!--.*?-->//smg;s/<build>.*?<\/build>//smg;s/<dependencies>.*?<\/dependencies>//smg;;s/<parent>.*?<\/parent>//smg;s/<scm>.*?<\/scm>//smg' | grep '<groupId>' | sed 's/.*>\(.*\)<.*/\1/g')
 }
 
 function getPomSCM(){
