@@ -53,6 +53,20 @@ function pomHasNot(){
   return 0
 }
 
+function getRawVersion(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  ARTIFACT=$1
+
+  # check to see if the artifact is even in the pom
+  if [ $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -eq 0 ]; then  
+    return 0
+  fi
+
+  echo $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\4/g;s/(.*?) .*/\1/g')  
+}
+
 function minVersion(){
   if [ ! -f "pom.xml" ]; then
     return 0
@@ -65,7 +79,7 @@ function minVersion(){
     return 0
   fi
 
-  VER=$(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\4/g;s/(.*?) .*/\1/g')  
+  VER=$(getRawVersion $ARTIFACT)
   VER_ORIG="$VER"
   VER=$(echo $VER | sed 's/-SNAPSHOT//g')
   VER=$(echo $VER | sed 's/.RELEASE//g')
