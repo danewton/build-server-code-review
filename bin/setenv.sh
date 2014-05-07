@@ -67,6 +67,21 @@ function getRawVersion(){
   echo $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\4/g;s/(.*?) .*/\1/g')  
 }
 
+function getMajorVersion(){
+  if [ ! -f "pom.xml" ]; then
+    return 0
+  fi;
+  ARTIFACT=$1
+
+  # check to see if the artifact is even in the pom
+  if [ $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -eq 0 ]; then  
+    return 0
+  fi
+
+  VER=$(getRawVersion $ARTIFACT)
+  echo $(echo $VER | perl -i -pe 's/(\d*)\..*/\1/g')
+}
+
 function minVersion(){
   if [ ! -f "pom.xml" ]; then
     return 0
