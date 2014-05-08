@@ -34,5 +34,6 @@ checkVersion "spring-aop"
 checkVersion "spring-test"
 checkVersion "spring-context"
 checkVersion "spring-context-support"
+checkVersion "spring-oxm"
 
 exit $rtn
