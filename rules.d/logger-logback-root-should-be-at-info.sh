@@ -10,6 +10,11 @@ if [ "$TYPE" != "war" ]; then
  exit 0
 fi
 
+IS_REL=$(isRelease $@)
+if [ "$IS_REL" != "true" ]; then
+ exit 0
+fi;
+
 if [ ! -f "src/main/resources/logback.xml" ]; then
  # this project doesn't hava logback
  exit 0
