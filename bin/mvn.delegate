@@ -1,0 +1,41 @@
+#!/bin/sh
+
+# this is a custom script intended to run validation scripts (or whatever you may want)
+# and then pass all of its arguments over to the real mvn command.
+
+PARENT_COMMAND=$(ps $PPID | tail -n 1 | awk "{print \$6}")
+echo "called from $PARENT_COMMAND, and args are : $@"
+
+MVN_REAL=/opt/soa/adm/products/maven/current/bin/mvn.orig
+OUT_FILE="dependencies.txt"
+
+function cleanDependencyOut(){
+  if [ -f "$OUT_FILE" ]; then
+    rm "$OUT_FILE"
+  fi;
+}
+
+# do some real work.  When the $PARENT_COMMAND == "-c", it's likely just a recursive call that mvn is making to itself
+trap "cleanDependencyOut" EXIT
+if [[ "-c" != "$PARENT_COMMAND" && -f "pom.xml" ]]; then
+
+ # determine the dependencies, cat them, and the rules will analyze the output file
+ $MVN_REAL dependency:tree > "$OUT_FILE" 2>&1
+ echo "found dependencies : "
+ cat "$OUT_FILE" | sed 's/^/  /g'
+
+ # pass all of the args over to the code-review script too, so some rules will be able to tell when to run
+ /opt/soa/build-server-code-review/bin/code-reviews.sh $@
+ if [ "$?" -ne 0 ]; then
+  exit 1
+ fi;
+
+fi;
+
+# clean up
+cleanDependencyOut
+trap - EXIT
+
+# call teh real mvn
+$MVN_REAL $@
+

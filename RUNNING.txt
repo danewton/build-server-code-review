@@ -1,0 +1,18 @@
+
+# to run, do an "svn checkout" of your favorite project, then generate a dependencies file
+svn co $SVN/foo/trunk foo
+mvn dependency:tree > dependencies.txt 2>&1
+
+# then simply run the code-review script, passing along any arguments that you would have passed to mvn
+/opt/projects/build-server-code-review/bin/code-reviews.sh clean package
+
+# since more rules are triggered on a release build, this is a good way to test
+mvn dependency:tree > dependencies.txt 2>&1 && /opt/projects/build-server-code-review/bin/code-reviews.sh clean release:prepare
+
+
+
+If you are ever feel froggy, and decide to try to refactor some of the scripts under the bin directory
+that have output files, and $$ files, be sure to review the output closely.  Any output for a rule's
+findings should be printed out just below the rules-name/status line ... not sporadically within the
+output.
+

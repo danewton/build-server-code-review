@@ -1,0 +1,9 @@
+
+
+For installation, copy the existing mvn install to mvn.orig, put the mvn.delegate script in its place, 
+and then update it to point to your local install of the build-server-code-review scripts.  Enjoy!!!
+ 
+ cp $MVN_HOME/bin/{mvn,mvn.orig}
+ cp bin/mvn.delegate $MVN_HOME/bin/mvn
+ vim $MVN_HOME/bin/mvn
+
