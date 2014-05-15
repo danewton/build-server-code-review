@@ -24,6 +24,9 @@ if [[ "-c" != "$PARENT_COMMAND" && -f "pom.xml" ]]; then
  echo "found dependencies : "
  cat "$OUT_FILE" | sed 's/^/  /g'
 
+ echo "svn info:"
+ svn info
+
  # pass all of the args over to the code-review script too, so some rules will be able to tell when to run
  /opt/soa/build-server-code-review/bin/code-reviews.sh $@
  if [ "$?" -ne 0 ]; then
