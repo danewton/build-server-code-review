@@ -88,6 +88,7 @@ function minVersion(){
   fi;
   ARTIFACT=$1
   MINVER=$2
+  RULE_MSG=$3
 
   # check to see if the artifact is even in the pom
   if [ $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | wc -l) -eq 0 ]; then  
@@ -99,6 +100,11 @@ function minVersion(){
   VER=$(echo $VER | sed 's/-SNAPSHOT//g')
   VER=$(echo $VER | sed 's/.RELEASE//g')
   VER=$(echo $VER | sed 's/.GA//g')
+
+  MSG="Please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
+  if [ "$RULE_MSG" != "" ]; then
+    MSG="$MSG $RULE_MSG"
+  fi
 
   # fix for 2 numbers, as it junit 4.4
   if [ $(echo "$MINVER" | grep -o "\." | wc -l) -eq 1 ]; then
@@ -114,7 +120,7 @@ function minVersion(){
     return 0
   fi
   if [ "$ACTVER_MAJ" -lt "$MINVER_MAJ" ]; then
-    echo "please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
+    echo $MSG
     return 1
   fi
 
@@ -124,7 +130,7 @@ function minVersion(){
     return 0
   fi
   if [ "$ACTVER_MIN" -lt "$MINVER_MIN" ]; then
-    echo "please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
+    echo $MSG
     return 1
   fi
 
@@ -134,7 +140,7 @@ function minVersion(){
     return 0
   fi
   if [ "$ACTVER_PATCH" -lt "$MINVER_PATCH" ]; then
-    echo "please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
+    echo $MSG
     return 1
   fi
 }
