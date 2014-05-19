@@ -10,6 +10,11 @@ if [[ "$TYPE" == "war" || "$TYPE" == "ear" || "$TYPE" == "pom" ]]; then
  exit 0
 fi
 
+ARTID=$(getPomArtifactId)
+if [ "$ARTID" == "SDL-pulse-tomcat-deploy" ]; then
+ exit 0
+fi
+
 ERR_RSLT=$EXIT_ERROR
 
 FAIL_DATE="20140524"
