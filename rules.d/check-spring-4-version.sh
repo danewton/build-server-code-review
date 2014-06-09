@@ -14,7 +14,7 @@ function checkVersion(){
   JAR=$1
   pomHas $JAR
   if [ $? -eq 1 ]; then
-    if [ $(getMajorVersion $JAR) -eq $MAJ_SPRING_VERSION  ]; then
+    if [ $(getMajorVersions $JAR) -eq $MAJ_SPRING_VERSION  ]; then
       minVersion $JAR $MIN_SPRING_VERSION
       if [ $? -ne 0 ]; then
         rtn=1

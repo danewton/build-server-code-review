@@ -54,7 +54,7 @@ function pomHasNot(){
   return 0
 }
 
-function getRawVersion(){
+function getRawVersions(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
@@ -68,7 +68,7 @@ function getRawVersion(){
   echo $(grep -E "\[.*:$ARTIFACT:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\4/g;s/(.*?) .*/\1/g')  
 }
 
-function getMajorVersion(){
+function getMajorVersions(){
   if [ ! -f "pom.xml" ]; then
     return 0
   fi;
@@ -79,7 +79,7 @@ function getMajorVersion(){
     return 0
   fi
 
-  VER=$(getRawVersion $ARTIFACT)
+  VER=$(getRawVersions $ARTIFACT)
   echo $(echo $VER | perl -i -pe 's/(\d*)\..*/\1/g')
 }
 
@@ -96,54 +96,57 @@ function minVersion(){
     return 0
   fi
 
-  VER=$(getRawVersion $ARTIFACT)
-  VER_ORIG="$VER"
-  VER=$(echo $VER | sed 's/-SNAPSHOT//g')
-  VER=$(echo $VER | sed 's/.RELEASE//g')
-  VER=$(echo $VER | sed 's/.GA//g')
-
-  MSG="Please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
-  if [ "$RULE_MSG" != "" ]; then
-    MSG="$MSG $RULE_MSG"
-  fi
-
-  # fix for 2 numbers, as it junit 4.4
-  if [ $(echo "$MINVER" | grep -o "\." | wc -l) -eq 1 ]; then
-    MINVER="$MINVER.0"
-  fi
-  if [ $(echo "$VER" | grep -o "\." | wc -l) -eq 1 ]; then
-    VER="$VER.0"
-  fi
- 
-  MINVER_MAJ=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/g')
-  ACTVER_MAJ=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/g')
-  if [ "$ACTVER_MAJ" -gt "$MINVER_MAJ" ]; then
-    return 0
-  fi
-  if [ "$ACTVER_MAJ" -lt "$MINVER_MAJ" ]; then
-    echo $MSG
-    return 1
-  fi
-
-  MINVER_MIN=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\2/g')
-  ACTVER_MIN=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\2/g')
-  if [ "$ACTVER_MIN" -gt "$MINVER_MIN" ]; then
-    return 0
-  fi
-  if [ "$ACTVER_MIN" -lt "$MINVER_MIN" ]; then
-    echo $MSG
-    return 1
-  fi
-
-  MINVER_PATCH=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\3/g')
-  ACTVER_PATCH=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\3/g')
-  if [ "$ACTVER_PATCH" -gt "$MINVER_PATCH" ]; then
-    return 0
-  fi
-  if [ "$ACTVER_PATCH" -lt "$MINVER_PATCH" ]; then
-    echo $MSG
-    return 1
-  fi
+  VERSIONS=$(getRawVersions $ARTIFACT)
+  for VER in $VERSIONS
+  do
+    VER_ORIG="$VER"
+    VER=$(echo $VER | sed 's/-SNAPSHOT//g')
+    VER=$(echo $VER | sed 's/.RELEASE//g')
+    VER=$(echo $VER | sed 's/.GA//g')
+  
+    MSG="Please update your $ARTIFACT from '"$VER_ORIG"' to '$MINVER' or higher."
+    if [ "$RULE_MSG" != "" ]; then
+      MSG="$MSG $RULE_MSG"
+    fi
+  
+    # fix for 2 numbers, as it junit 4.4
+    if [ $(echo "$MINVER" | grep -o "\." | wc -l) -eq 1 ]; then
+      MINVER="$MINVER.0"
+    fi
+    if [ $(echo "$VER" | grep -o "\." | wc -l) -eq 1 ]; then
+      VER="$VER.0"
+    fi
+   
+    MINVER_MAJ=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/g')
+    ACTVER_MAJ=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\1/g')
+    if [ "$ACTVER_MAJ" -gt "$MINVER_MAJ" ]; then
+      return 0
+    fi
+    if [ "$ACTVER_MAJ" -lt "$MINVER_MAJ" ]; then
+      echo $MSG
+      return 1
+    fi
+  
+    MINVER_MIN=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\2/g')
+    ACTVER_MIN=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\2/g')
+    if [ "$ACTVER_MIN" -gt "$MINVER_MIN" ]; then
+      return 0
+    fi
+    if [ "$ACTVER_MIN" -lt "$MINVER_MIN" ]; then
+      echo $MSG
+      return 1
+    fi
+  
+    MINVER_PATCH=$(echo $MINVER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\3/g')
+    ACTVER_PATCH=$(echo $VER | sed 's/\(.*\)\.\(.*\)\.\(.*\)/\3/g')
+    if [ "$ACTVER_PATCH" -gt "$MINVER_PATCH" ]; then
+      return 0
+    fi
+    if [ "$ACTVER_PATCH" -lt "$MINVER_PATCH" ]; then
+      echo $MSG
+      return 1
+    fi
+  done
 }
 
 function ensureArtifactScope(){
@@ -153,24 +156,27 @@ function ensureArtifactScope(){
   ARTIFACT=$1
   DESIRED_SCOPE=$2
   OPTIONAL_SCOPE=$3
-  ACTUAL_SCOPE=$(grep -E "\[.*:$1:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\5/g;s/(.*?) .*/\1/g')
-  if [ "$ACTUAL_SCOPE" == "" ]; then
+  ACTUAL_SCOPES=$(grep -E "\[.*:$1:" $DEPENDENCIES_FILE | perl -i -pe 's/.*? (.*):(.*):(.*):(.*):(.*) ?.*/\5/g;s/(.*?) .*/\1/g')
+  if [ "$ACTUAL_SCOPES" == "" ]; then
     # artifact does not explicitly exist for this build
     return 0
   fi
-  if [ "$ACTUAL_SCOPE" == "$DESIRED_SCOPE" ]; then
-    return 0
-  fi
-  if [[ "$OPTIONAL_SCOPE" != "" && "$ACTUAL_SCOPE" == "$OPTIONAL_SCOPE" ]]; then
-    return 0
-  fi
-
-  MSG="Please change the scope of '$ARTIFACT' from '$ACTUAL_SCOPE' to '$DESIRED_SCOPE'"
-  if [ "$OPTIONAL_SCOPE" != "" ]; then
-    MSG="$MSG or '$OPTIONAL_SCOPE'"
-  fi
-  echo $MSG
-  return 1
+  for ACTUAL_SCOPE in $ACTUAL_SCOPES
+  do
+    if [ "$ACTUAL_SCOPE" == "$DESIRED_SCOPE" ]; then
+      return 0
+    fi
+    if [[ "$OPTIONAL_SCOPE" != "" && "$ACTUAL_SCOPE" == "$OPTIONAL_SCOPE" ]]; then
+      return 0
+    fi
+  
+    MSG="Please change the scope of '$ARTIFACT' from '$ACTUAL_SCOPE' to '$DESIRED_SCOPE'"
+    if [ "$OPTIONAL_SCOPE" != "" ]; then
+      MSG="$MSG or '$OPTIONAL_SCOPE'"
+    fi
+    echo $MSG
+    return 1
+  done
 }
 
 function getPomVersion(){
