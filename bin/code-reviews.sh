@@ -22,7 +22,7 @@ function xargsRunner(){
 export -f xargsRunner;
 
 ORIG_ARGS="$@"
-find $REVIEW_HOME/rules.d/*.sh | xargs -P 8 -n 1 -I "{}" sh -c "xargsRunner $SCRIPT_DIR {} $rtnfile $emailBody $ORIG_ARGS"
+find $REVIEW_HOME/rules.d/*.sh | sort | xargs -P 8 -n 1 -I "{}" sh -c "xargsRunner $SCRIPT_DIR {} $rtnfile $emailBody $ORIG_ARGS"
 
 HAS_ERRORS=0
 HAS_WARNINGS=0
@@ -33,6 +33,9 @@ if [ -f $rtnfile ]; then
 fi
 
 function emailWarnings(){
+  if [ ! -d ".svn" ]; then
+    return
+  fi
   LAST_COMMITTER=$(svn info | grep Author: | perl -i -pe 's/.*: (.*)/\1/g' | grep '\.')
   PROJECT="$(svn info | grep URL: | cut -d' ' -f2)"
   REVISION="$(svn info | grep Revision: | cut -d' ' -f2)"

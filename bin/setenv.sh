@@ -11,6 +11,11 @@ if [ -f "pom.xml" ]; then
  IS_MVN=true
 fi
 
+IS_SVN=false
+if [ -d ".svn" ]; then
+ IS_SVN=true
+fi
+
 TYPE="jar"
 FOUND_TYPE=$(grep 'packaging' pom.xml | sed 's/.*>\(.*\)<.*/\1/g')
 if [ "$FOUND_TYPE" != "" ]; then
@@ -218,7 +223,8 @@ function isRelease(){
 }
 
 function isPulseModule(){
-  if [ $(svn info | grep https://svn.suddenlink.cequel3.com/svn/pulse | wc -l) -ne 0 ]; then
+  GROUPID=$(getPomGroupId)
+  if [ $(echo $GROUPID | grep -i pulse | wc -l) -ne 0 ]; then
     return 0
   fi
   return 1
