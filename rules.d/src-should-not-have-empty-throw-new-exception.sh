@@ -20,9 +20,9 @@ if [ $? -eq 0 ]; then
   ERR_RSLT=$EXIT_WARN
 fi
 
-if [ $(grep -R 'new Exception()' $SRCDIR | grep -v '.svn' | wc -l) -ne 0 ]; then
+if [ $(grep -R 'new Exception()' $SRCDIR | grep -Ev '//.*new Exception' | grep -v '.svn' | wc -l) -ne 0 ]; then
   echo "Please replace the 'new Exception()' calls with something more meaningful.  If this is being thrown as a new Exception with no message from a catch block, then that could likely lead to the full stack not getting logged.  If you're creating new exceptions, please consider making your own custom exception type.  There are times where you may want to log-and-rethrow an exception; we certainly would not want the stack to get logged twice, or get obscured. $RULE_MSG"
-  grep -nR 'new Exception()' $SRCDIR | grep -v '.svn'
+  grep -nR 'new Exception()' $SRCDIR | grep -Ev '//.*new Exception' | grep -v '.svn'
   exit $ERR_RSLT
 fi
 
