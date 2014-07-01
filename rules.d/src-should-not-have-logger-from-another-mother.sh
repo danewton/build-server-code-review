@@ -25,9 +25,9 @@ if [ $? -eq 0 ]; then
   ERR_RSLT=$EXIT_WARN
 fi
 
-if [ "$(grep -R '^[^import].*Logger.*class' $(find src/main/java -type f \( -iname *.java -and -not -iwholename .svn \) ) | perl -i -ne '$line=$_;s/.*\/(.*?).java.*\((.*?).class.*/\1,\2/g; print "mismatched logger : $line" if "$1" ne "$2";' | wc -l)" -ne 0 ]; then
+if [ "$(grep -R '^[^import].*Logger.*class' $(find src/main/java -type f \( -iname *.java -and -not -iwholename .svn \) ) | perl -i -ne '$line=$_;s/.*\/(.*?).java.*\(\s*(.*?).class.*/\1,\2/g; print "mismatched logger : $line" if "$1" ne "$2";' | wc -l)" -ne 0 ]; then
   echo "Please update your class's logger to use the current class rather than some other class. $RULE_MSG"
-  grep -R '^[^import].*Logger.*class' $(find src/main/java -type f \( -iname *.java -and -not -iwholename .svn \) ) | perl -i -ne '$line=$_;s/.*\/(.*?).java.*\((.*?).class.*/\1,\2/g; print "  mismatched logger : $line" if "$1" ne "$2";'
-  exit 1
+  grep -R '^[^import].*Logger.*class' $(find src/main/java -type f \( -iname *.java -and -not -iwholename .svn \) ) | perl -i -ne '$line=$_;s/.*\/(.*?).java.*\(\s*(.*?).class.*/\1,\2/g; print "  mismatched logger : $line" if "$1" ne "$2";'
+  exit $ERR_RSLT
 fi
 
